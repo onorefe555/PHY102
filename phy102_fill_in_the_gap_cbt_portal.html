@@ -1,0 +1,2510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHY102 CBT Portal — Electricity, Magnetism & Modern Physics Power by Moses</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           DESIGN TOKENS & CSS VARIABLES
+           ========================================================================== */
+        :root {
+            --bg-app: #f3f5f9;
+            --bg-surface: #ffffff;
+            --bg-subtle: #f8fafc;
+            --bg-muted: #eef2f6;
+            
+            --primary: #1e40af;
+            --primary-hover: #1d4ed8;
+            --primary-soft: #eff6ff;
+            --primary-border: #bfdbfe;
+
+            --success: #059669;
+            --success-soft: #ecfdf5;
+            --success-border: #a7f3d0;
+
+            --danger: #dc2626;
+            --danger-soft: #fef2f2;
+            --danger-border: #fecaca;
+
+            --warning: #d97706;
+            --warning-soft: #fffbeb;
+            --warning-border: #fde68a;
+
+            --text-main: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        /* ==========================================================================
+           RESET & BASE STYLES
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        button, input, select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            transition: all 0.18s ease;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ==========================================================================
+           HEADER / TOPBAR
+           ========================================================================== */
+        .topbar {
+            background-color: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.875rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .topbar-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.9rem;
+            padding: 0.45rem 0.75rem;
+            border-radius: var(--radius-sm);
+            letter-spacing: 0.04em;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        .brand-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .brand-sub {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            display: block;
+        }
+
+        .exam-hud {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .hud-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.45rem 0.9rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            background-color: var(--bg-subtle);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .hud-timer {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            border-color: var(--primary-border);
+        }
+
+        .hud-timer.warning {
+            background-color: var(--warning-soft);
+            color: var(--warning);
+            border-color: var(--warning-border);
+        }
+
+        .hud-timer.danger {
+            background-color: var(--danger-soft);
+            color: var(--danger);
+            border-color: var(--danger-border);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        /* ==========================================================================
+           MAIN CONTAINER
+           ========================================================================== */
+        .main-wrapper {
+            flex: 1;
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* ==========================================================================
+           1. START / CONFIGURATION VIEW
+           ========================================================================== */
+        .setup-container {
+            max-width: 780px;
+            margin: 1.5rem auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .setup-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: #ffffff;
+            padding: 2.25rem 2rem;
+            position: relative;
+        }
+
+        .setup-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #e0f2fe;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 0.25rem 0.7rem;
+            border-radius: var(--radius-full);
+            margin-bottom: 0.75rem;
+        }
+
+        .setup-hero h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 0.5rem;
+        }
+
+        .setup-hero p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            max-width: 600px;
+        }
+
+        .setup-body {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            padding: 0.7rem 0.9rem;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.92rem;
+            color: var(--text-main);
+            background-color: var(--bg-surface);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+        }
+
+        .mode-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+
+        .mode-card {
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.1rem;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            background: var(--bg-subtle);
+            position: relative;
+        }
+
+        .mode-card:hover {
+            border-color: #93c5fd;
+        }
+
+        .mode-card.active {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .mode-card-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+        }
+
+        .mode-card-desc {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        .info-box {
+            background-color: var(--bg-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .info-box strong {
+            color: var(--text-main);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.92rem;
+            padding: 0.72rem 1.35rem;
+            border-radius: var(--radius-sm);
+            transition: all 0.16s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 2px 5px rgba(30, 64, 175, 0.25);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-surface);
+            color: var(--text-main);
+            border: 1.5px solid var(--border-color);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: var(--bg-subtle);
+            border-color: #cbd5e1;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: #ffffff;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background-color: #047857;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-soft);
+            color: var(--warning);
+            border: 1.5px solid var(--warning-border);
+        }
+
+        .btn-warning.flagged {
+            background-color: var(--warning);
+            color: #ffffff;
+            border-color: var(--warning);
+        }
+
+        .btn-danger-outline {
+            background-color: var(--bg-surface);
+            color: var(--danger);
+            border: 1.5px solid var(--danger-border);
+        }
+
+        .btn-danger-outline:hover:not(:disabled) {
+            background-color: var(--danger-soft);
+        }
+
+        .btn-lg {
+            padding: 0.9rem 1.75rem;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        /* ==========================================================================
+           2. EXAM WORKSPACE VIEW
+           ========================================================================== */
+        .exam-layout {
+            display: grid;
+            grid-template-columns: 1fr 330px;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        @media (max-width: 960px) {
+            .exam-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .question-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .question-card {
+                padding: 1.35rem;
+            }
+        }
+
+        .question-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .q-number-badge {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--primary);
+            background: var(--primary-soft);
+            padding: 0.35rem 0.85rem;
+            border-radius: var(--radius-full);
+        }
+
+        .q-topic-tag {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--bg-muted);
+            padding: 0.35rem 0.8rem;
+            border-radius: var(--radius-full);
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background-color: var(--bg-muted);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            width: 0%;
+            transition: width 0.25s ease;
+        }
+
+        .question-prompt {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text-main);
+            line-height: 1.75;
+            background: var(--bg-subtle);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary);
+        }
+
+        .inline-gap {
+            display: inline-block;
+            min-width: 130px;
+            border-bottom: 2.5px dashed var(--primary);
+            color: var(--primary);
+            font-weight: 700;
+            text-align: center;
+            padding: 0 0.5rem;
+            margin: 0 0.25rem;
+            font-family: var(--font-mono);
+            font-size: 1.05rem;
+        }
+
+        .inline-gap.filled {
+            border-bottom-style: solid;
+            background: var(--primary-soft);
+            border-radius: 4px 4px 0 0;
+        }
+
+        .answer-box-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .answer-input-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .gap-input {
+            flex: 1;
+            min-width: 220px;
+            padding: 0.9rem 1.1rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            background: var(--bg-surface);
+            transition: all 0.16s ease;
+        }
+
+        .gap-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+
+        .gap-input.is-correct {
+            border-color: var(--success);
+            background-color: var(--success-soft);
+            color: #065f46;
+        }
+
+        .gap-input.is-incorrect {
+            border-color: var(--danger);
+            background-color: var(--danger-soft);
+            color: #991b1b;
+        }
+
+        .instant-feedback {
+            padding: 0.9rem 1.15rem;
+            border-radius: var(--radius-md);
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .instant-feedback.correct {
+            background: var(--success-soft);
+            border: 1px solid var(--success-border);
+            color: #065f46;
+        }
+
+        .instant-feedback.incorrect {
+            background: var(--danger-soft);
+            border: 1px solid var(--danger-border);
+            color: #991b1b;
+        }
+
+        .question-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-group {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+        }
+
+        .kbd-hint {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        kbd {
+            background: var(--bg-muted);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.1rem 0.4rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* ==========================================================================
+           SIDEBAR PALETTE
+           ========================================================================== */
+        .sidebar-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 1.35rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.15rem;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .stats-mini {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.45rem;
+            max-height: 310px;
+            overflow-y: auto;
+            padding-right: 0.25rem;
+        }
+
+        .palette-btn {
+            aspect-ratio: 1;
+            border-radius: var(--radius-sm);
+            font-size: 0.82rem;
+            font-weight: 600;
+            border: 1.5px solid var(--border-color);
+            background: var(--bg-subtle);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .palette-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .palette-btn.current {
+            ring: 2px solid var(--primary);
+            box-shadow: 0 0 0 2.5px var(--primary);
+            font-weight: 800;
+        }
+
+        .palette-btn.answered {
+            background: var(--primary-soft);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .palette-btn.correct {
+            background: var(--success-soft);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .palette-btn.incorrect {
+            background: var(--danger-soft);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .palette-btn.flagged::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 9px;
+            height: 9px;
+            background: var(--warning);
+            border-radius: 50%;
+            border: 1.5px solid #ffffff;
+        }
+
+        .legend-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .legend-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 3px;
+            border: 1.5px solid var(--border-color);
+            background: var(--bg-subtle);
+        }
+
+        .legend-dot.ans { background: var(--primary-soft); border-color: var(--primary); }
+        .legend-dot.flg { background: var(--warning); border-color: var(--warning); border-radius: 50%; }
+        .legend-dot.cor { background: var(--success-soft); border-color: var(--success); }
+        .legend-dot.inc { background: var(--danger-soft); border-color: var(--danger); }
+
+        /* ==========================================================================
+           3. RESULTS & REVIEW VIEW
+           ========================================================================== */
+        .results-container {
+            max-width: 960px;
+            margin: 1rem auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .score-banner {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (max-width: 680px) {
+            .score-banner {
+                grid-template-columns: 1fr;
+                text-align: center;
+                justify-items: center;
+            }
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-soft);
+            border: 6px solid var(--primary);
+        }
+
+        .score-circle.grade-a { background: var(--success-soft); border-color: var(--success); color: #065f46; }
+        .score-circle.grade-b { background: var(--primary-soft); border-color: var(--primary); color: #1e3a8a; }
+        .score-circle.grade-c { background: var(--warning-soft); border-color: var(--warning); color: #92400e; }
+        .score-circle.grade-f { background: var(--danger-soft); border-color: var(--danger); color: #991b1b; }
+
+        .score-pct {
+            font-size: 2.1rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .score-grade {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.25rem;
+        }
+
+        .score-details h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.35rem;
+        }
+
+        .score-details p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .metrics-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .metric-chip {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-color);
+            padding: 0.55rem 0.95rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+        }
+
+        .metric-chip strong {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .review-controls {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.35rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.45rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.45rem 0.9rem;
+            border-radius: var(--radius-full);
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-color);
+        }
+
+        .filter-tab.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        .review-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .review-item {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.35rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .review-item.correct { border-left-color: var(--success); }
+        .review-item.incorrect { border-left-color: var(--danger); }
+        .review-item.unanswered { border-left-color: var(--warning); }
+
+        .review-item-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.65rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .status-badge {
+            padding: 0.2rem 0.65rem;
+            border-radius: var(--radius-full);
+            font-size: 0.76rem;
+            text-transform: uppercase;
+        }
+
+        .status-badge.correct { background: var(--success-soft); color: var(--success); }
+        .status-badge.incorrect { background: var(--danger-soft); color: var(--danger); }
+        .status-badge.unanswered { background: var(--warning-soft); color: var(--warning); }
+
+        .review-q-text {
+            font-size: 1.02rem;
+            font-weight: 500;
+            color: var(--text-main);
+            margin-bottom: 0.9rem;
+        }
+
+        .review-answers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0.75rem;
+            background: var(--bg-subtle);
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+        }
+
+        /* ==========================================================================
+           CUSTOM CONFIRMATION MODAL (No browser alert/confirm)
+           ========================================================================== */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .modal-box {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            max-width: 440px;
+            width: 100%;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-box h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-box p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.35rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* ==========================================================================
+           FOOTER
+           ========================================================================== */
+        .footer {
+            text-align: center;
+            padding: 1.25rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-surface);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION HEADER -->
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <div class="brand-badge">PHY102</div>
+                <div>
+                    <span class="brand-title">Fill-in-the-Gap CBT Simulator</span>
+                    <span class="brand-sub">Electricity, Magnetism & Modern Physics</span>
+                     <span class="brand-sub">Powered By Moses. Contact : 08167390958</span>
+                </div>
+            </div>
+
+            <div id="examHud" class="exam-hud hidden">
+                <div class="hud-pill" id="hudModeBadge">Exam Mode</div>
+                <div class="hud-pill hud-timer" id="hudTimer">
+                    <span>⏱</span>
+                    <span id="timerDisplay">20:00</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="main-wrapper">
+
+        <!-- ======================================================================
+             VIEW 1: START / CONFIGURATION SCREEN
+             ====================================================================== -->
+        <section id="setupView" class="setup-container">
+            <div class="setup-hero">
+                <span class="setup-tag">NOUN / University Physics CBT</span>
+                <h1>PHY102 Fill-in-the-Gap Practice & Exam</h1>
+                <p>Master every core concept from the PHY102 exam summary—covering Electrostatics, Gauss’s Law, Capacitors, Circuits, Magnetism, Electronics, and Nuclear Physics.</p>
+            </div>
+
+            <div class="setup-body">
+                <div>
+                    <label class="form-label" style="display:block; margin-bottom:0.6rem;">1. Select Assessment Mode</label>
+                    <div class="mode-cards">
+                        <div class="mode-card active" data-mode="exam" id="cardExamMode">
+                            <div class="mode-card-title">
+                                <span>Timed Exam Mode</span>
+                                <span>🎯</span>
+                            </div>
+                            <div class="mode-card-desc">Simulates real CBT conditions. Countdown timer active; answers are graded upon submission.</div>
+                        </div>
+                        <div class="mode-card" data-mode="practice" id="cardPracticeMode">
+                            <div class="mode-card-title">
+                                <span>Study / Practice Mode</span>
+                                <span>💡</span>
+                            </div>
+                            <div class="mode-card-desc">Untimed learning mode with instant answer verification and immediate feedback per question.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="topicFilter">2. Topic Filter</label>
+                        <select id="topicFilter" class="form-control">
+                            <option value="ALL">All Topics (Complete 80-Question Bank)</option>
+                            <option value="Lightning & Electrostatics">Lightning & Electrostatics</option>
+                            <option value="Coulomb's & Gauss's Laws">Coulomb's & Gauss's Laws</option>
+                            <option value="Potential & Capacitors">Electric Potential & Capacitors</option>
+                            <option value="Current, Circuits & Electrolysis">Current, Circuits & Electrolysis</option>
+                            <option value="Magnetism & Induction">Magnetism & Electromagnetic Induction</option>
+                            <option value="Electronics & Photoelectric Effect">Electronics, Rectifiers & Photoelectric</option>
+                            <option value="Atomic & Nuclear Physics">Blackbody, Atomic & Nuclear Physics</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="questionCount">3. Number of Questions</label>
+                        <select id="questionCount" class="form-control">
+                            <option value="15">15 Questions (Quick Drill)</option>
+                            <option value="30" selected>30 Questions (Standard CBT)</option>
+                            <option value="50">50 Questions (Intensive Mock)</option>
+                            <option value="ALL">All Available in Topic</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="durationGroup">
+                        <label class="form-label" for="examDuration">4. Time Limit (Exam Mode)</label>
+                        <select id="examDuration" class="form-control">
+                            <option value="10">10 Minutes</option>
+                            <option value="20" selected>20 Minutes</option>
+                            <option value="35">35 Minutes</option>
+                            <option value="50">50 Minutes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>Smart Answer Matching:</strong> Your typed answers are automatically normalized for capitalization, extra spaces, and standard physics equivalents (e.g., <code>EMF</code> or <code>Electromotive force</code>, <code>Coulomb</code> or <code>Coulombs</code>, <code>20KA</code> or <code>20 KA</code>). Press <kbd>Enter</kbd> to quickly submit or advance.
+                </div>
+
+                <button id="startExamBtn" class="btn btn-primary btn-lg">
+                    Start PHY102 CBT Session →
+                </button>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             VIEW 2: ACTIVE CBT WORKSPACE
+             ====================================================================== -->
+        <section id="examView" class="exam-layout hidden">
+            <!-- Left Column: Question Card -->
+            <div class="question-card">
+                <div class="question-meta">
+                    <span class="q-number-badge" id="qCounterBadge">Question 1 of 30</span>
+                    <span class="q-topic-tag" id="qTopicBadge">Electrostatics</span>
+                </div>
+
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div class="question-prompt" id="questionPrompt">
+                    <!-- Rendered dynamically with inline gap -->
+                </div>
+
+                <div class="answer-box-wrapper">
+                    <label for="gapInput" class="form-label">Type your answer to fill the gap:</label>
+                    <div class="answer-input-row">
+                        <input 
+                            type="text" 
+                            id="gapInput" 
+                            class="gap-input" 
+                            placeholder="Enter missing word or value..." 
+                            autocomplete="off" 
+                            spellcheck="false"
+                        >
+                        <button id="checkAnswerBtn" class="btn btn-success hidden">Check Answer</button>
+                    </div>
+                    <span class="kbd-hint">Tip: Press <kbd>Enter</kbd> to save & move next (or check answer in Practice Mode).</span>
+                </div>
+
+                <div id="instantFeedbackBox" class="instant-feedback hidden"></div>
+
+                <div class="question-actions">
+                    <div class="action-group">
+                        <button id="prevBtn" class="btn btn-secondary">← Previous</button>
+                        <button id="nextBtn" class="btn btn-primary">Next →</button>
+                    </div>
+
+                    <div class="action-group">
+                        <button id="flagBtn" class="btn btn-warning">⚑ Flag for Review</button>
+                        <button id="clearBtn" class="btn btn-secondary">Clear</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Question Palette & Submit -->
+            <aside class="sidebar-card">
+                <div class="sidebar-header">
+                    <span class="sidebar-title">Question Navigator</span>
+                    <span class="stats-mini" id="answeredCountText">0 / 30 Answered</span>
+                </div>
+
+                <div class="palette-grid" id="paletteGrid">
+                    <!-- Numbered buttons generated via JS -->
+                </div>
+
+                <div class="legend-list" id="legendList">
+                    <div class="legend-item"><span class="legend-dot ans"></span> Answered</div>
+                    <div class="legend-item"><span class="legend-dot"></span> Unanswered</div>
+                    <div class="legend-item"><span class="legend-dot flg"></span> Flagged</div>
+                    <div class="legend-item practice-only hidden"><span class="legend-dot cor"></span> Correct</div>
+                    <div class="legend-item practice-only hidden"><span class="legend-dot inc"></span> Incorrect</div>
+                </div>
+
+                <button id="submitExamBtn" class="btn btn-danger-outline" style="width:100%; margin-top:0.25rem;">
+                    Finish & Submit CBT
+                </button>
+            </aside>
+        </section>
+
+        <!-- ======================================================================
+             VIEW 3: RESULTS & DETAILED REVIEW SCREEN
+             ====================================================================== -->
+        <section id="resultsView" class="results-container hidden">
+            <div class="score-banner">
+                <div class="score-circle" id="scoreCircle">
+                    <span class="score-pct" id="scorePercent">0%</span>
+                    <span class="score-grade" id="scoreGradeLabel">Grade</span>
+                </div>
+
+                <div class="score-details">
+                    <h2 id="resultHeadline">CBT Session Completed</h2>
+                    <p id="resultSubtext">Here is a breakdown of your performance across the PHY102 fill-in-the-gap questions.</p>
+
+                    <div class="metrics-row">
+                        <div class="metric-chip">Score: <strong id="metricRaw">0 / 30</strong></div>
+                        <div class="metric-chip">Correct: <strong id="metricCorrect" style="color:var(--success)">0</strong></div>
+                        <div class="metric-chip">Incorrect: <strong id="metricIncorrect" style="color:var(--danger)">0</strong></div>
+                        <div class="metric-chip">Unanswered: <strong id="metricUnanswered" style="color:var(--warning)">0</strong></div>
+                        <div class="metric-chip">Time Taken: <strong id="metricTime">00:00</strong></div>
+                    </div>
+
+                    <div class="action-group">
+                        <button id="retryMissedBtn" class="btn btn-warning hidden">Practice Missed Questions</button>
+                        <button id="retakeSameBtn" class="btn btn-secondary">Retake Same Set</button>
+                        <button id="newSessionBtn" class="btn btn-primary">New CBT Configuration</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-controls">
+                <strong style="font-size:0.95rem;">Detailed Answer Script</strong>
+                <div class="filter-tabs" id="reviewFilterTabs">
+                    <button class="filter-tab active" data-filter="all">All Questions</button>
+                    <button class="filter-tab" data-filter="correct">Correct</button>
+                    <button class="filter-tab" data-filter="incorrect">Incorrect</button>
+                    <button class="filter-tab" data-filter="unanswered">Unanswered</button>
+                </div>
+            </div>
+
+            <div class="review-list" id="reviewList">
+                <!-- Detailed review cards rendered via JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- CUSTOM CONFIRMATION MODAL -->
+    <div id="confirmModal" class="modal-backdrop hidden">
+        <div class="modal-box">
+            <h3 id="modalTitle">Submit Assessment?</h3>
+            <p id="modalMessage">Are you sure you want to finish and grade your CBT session now?</p>
+            <div class="modal-actions">
+                <button id="modalCancelBtn" class="btn btn-secondary">Continue Test</button>
+                <button id="modalConfirmBtn" class="btn btn-primary">Yes, Submit Now</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        PHY102: Electricity, Magnetism & Modern Physics — Interactive Fill-in-the-Gap CBT Study Engine
+    </footer>
+
+    <script>
+        /**
+         * ============================================================================
+         * PHY102 QUESTION BANK (80 Distinct Fill-in-the-Gap Questions from PDF)
+         * Each entry includes:
+         *  - id: unique integer
+         *  - topic: thematic module from PHY102
+         *  - before: text preceding the blank
+         *  - after: text following the blank
+         *  - answer: primary official answer from the PDF
+         *  - accepted: array of valid accepted variations/synonyms
+         * ============================================================================
+         */
+        const PHY102_QUESTIONS = [
+            // --- MODULE 1: LIGHTNING & ELECTROSTATICS ---
+            {
+                id: 1,
+                topic: "Lightning & Electrostatics",
+                before: "",
+                after: " and thunder are two common phenomena in our hot and humid atmosphere in Nigeria.",
+                answer: "Lightning",
+                accepted: ["lightning", "lightening"]
+            },
+            {
+                id: 2,
+                topic: "Lightning & Electrostatics",
+                before: "A physicist named ",
+                after: " demonstrated as long ago as 1752 that thunder clouds are charged with electricity.",
+                answer: "Benjamin Franklin",
+                accepted: ["benjamin franklin", "franklin"]
+            },
+            {
+                id: 3,
+                topic: "Lightning & Electrostatics",
+                before: "The amount of electric current during the discharge of charged clouds is about ",
+                after: ".",
+                answer: "20KA",
+                accepted: ["20ka", "20 ka", "20,000a", "20000a", "20 kiloamperes"]
+            },
+            {
+                id: 4,
+                topic: "Lightning & Electrostatics",
+                before: "Lightning develops in a small area which is about ",
+                after: " in width.",
+                answer: "20cm",
+                accepted: ["20cm", "20 cm", "20 centimeters", "20 centimetres"]
+            },
+            {
+                id: 5,
+                topic: "Lightning & Electrostatics",
+                before: "During a lightning discharge, in a fraction of a second, temperature rises to about ",
+                after: ".",
+                answer: "150000C",
+                accepted: ["150000c", "15000c", "15000°c", "150000°c", "15000 c", "150000 c"]
+            },
+            {
+                id: 6,
+                topic: "Lightning & Electrostatics",
+                before: "The force responsible for holding electrons to nuclei to form atoms and molecules is called ",
+                after: ".",
+                answer: "Electrostatic force",
+                accepted: ["electrostatic force", "electrostatic", "electric force"]
+            },
+            {
+                id: 7,
+                topic: "Lightning & Electrostatics",
+                before: "The study of static electric charges is known as ",
+                after: ".",
+                answer: "Electrostatics",
+                accepted: ["electrostatics", "electrostatic"]
+            },
+            {
+                id: 8,
+                topic: "Lightning & Electrostatics",
+                before: "The ancient Greeks discovered that ",
+                after: " when rubbed with silk acquired the property of attracting light objects such as pieces of chaff.",
+                answer: "Amber",
+                accepted: ["amber"]
+            },
+            {
+                id: 9,
+                topic: "Lightning & Electrostatics",
+                before: "",
+                after: " discovered that other substances exhibit the same electrification effect proportional to the area of the surface rubbed.",
+                answer: "William Gilbert",
+                accepted: ["william gilbert", "gilbert"]
+            },
+            {
+                id: 10,
+                topic: "Lightning & Electrostatics",
+                before: "",
+                after: " (1745) discovered that there are two kinds of electricity.",
+                answer: "Du Fay",
+                accepted: ["du fay", "dufay", "charles du fay"]
+            },
+            {
+                id: 11,
+                topic: "Lightning & Electrostatics",
+                before: "Glass rubbed with silk acquires a positive charge, whereas ebonite rubbed with fur acquires a ",
+                after: " charge.",
+                answer: "Negative",
+                accepted: ["negative", "-ve"]
+            },
+            {
+                id: 12,
+                topic: "Lightning & Electrostatics",
+                before: "The process of charging bodies by means of rubbing them together is called ",
+                after: ".",
+                answer: "Charging by friction",
+                accepted: ["charging by friction", "friction"]
+            },
+            {
+                id: 13,
+                topic: "Lightning & Electrostatics",
+                before: "Electric charge is measured in ",
+                after: " (SI symbol: C).",
+                answer: "Coulombs",
+                accepted: ["coulombs", "coulomb"]
+            },
+            {
+                id: 14,
+                topic: "Lightning & Electrostatics",
+                before: "A ",
+                after: " is the quantity of charge flowing per second through a conductor in which there is a steady current of 1A.",
+                answer: "Coulomb",
+                accepted: ["coulomb", "1 coulomb"]
+            },
+            {
+                id: 15,
+                topic: "Lightning & Electrostatics",
+                before: "The algebraic sum of equal and opposite charges on two bodies is ",
+                after: ".",
+                answer: "Zero",
+                accepted: ["zero", "0"]
+            },
+
+            // --- MODULE 2: COULOMB'S & GAUSS'S LAWS ---
+            {
+                id: 16,
+                topic: "Coulomb's & Gauss's Laws",
+                before: "The magnitude of the forces between charged spheres was first investigated quantitatively in 1785 by ",
+                after: ".",
+                answer: "Charles Coulomb",
+                accepted: ["charles coulomb", "coulomb"]
+            },
+            {
+                id: 17,
+                topic: "Coulomb's & Gauss's Laws",
+                before: "The permittivity of a vacuum is denoted by ε₀ and is called the ",
+                after: ".",
+                answer: "Permittivity of free space",
+                accepted: ["permittivity of free space", "permittivity of vacuum"]
+            },
+            {
+                id: 18,
+                topic: "Coulomb's & Gauss's Laws",
+                before: "The principle that the total electric force on a charge is the vector sum of forces due to individual charges is the ",
+                after: ".",
+                answer: "Principle of Superposition",
+                accepted: ["principle of superposition", "superposition principle", "superposition"]
+            },
+            {
+                id: 19,
+                topic: "Coulomb's & Gauss's Laws",
+                before: "A region where an electric charge experiences a force is called an ",
+                after: ".",
+                answer: "Electric field",
+                accepted: ["electric field"]
+            },
+            {
+                id: 20,
+                topic: "Coulomb's & Gauss's Laws",
+                before: "Electric field strength is measured in ",
+                after: " (N/C).",
+                answer: "Newtons per Coulomb",
+                accepted: ["newtons per coulomb", "newton per coulomb", "newtons coulomb", "volt per metre", "volt per meter"]
+            },
+            {
+                id: 21,
+                topic: "Coulomb's & Gauss's Laws",
+                before: "A path along which a free positive point charge would travel in an electric field is defined as a ",
+                after: ".",
+                answer: "Field line",
+                accepted: ["field line", "field lines", "electric field line", "line of force"]
+            },
+            {
+                id: 22,
+                topic: "Coulomb's & Gauss's Laws",
+                before: "",
+                after: " expresses the relation between an electric charge and the electric flux through any hypothetical closed surface.",
+                answer: "Gauss's law",
+                accepted: ["gauss's law", "gauss law", "gausss law"]
+            },
+            {
+                id: 23,
+                topic: "Coulomb's & Gauss's Laws",
+                before: "Gauss's law applies to any hypothetical closed surface called a ",
+                after: ".",
+                answer: "Gaussian surface",
+                accepted: ["gaussian surface", "gaussian"]
+            },
+            {
+                id: 24,
+                topic: "Coulomb's & Gauss's Laws",
+                before: "The surface integral of the electric field E over a surface is defined as ",
+                after: ".",
+                answer: "Electric flux",
+                accepted: ["electric flux"]
+            },
+            {
+                id: 25,
+                topic: "Coulomb's & Gauss's Laws",
+                before: "Electric flux is a ",
+                after: " quantity.",
+                answer: "Scalar",
+                accepted: ["scalar"]
+            },
+            {
+                id: 26,
+                topic: "Coulomb's & Gauss's Laws",
+                before: "The direction of the electric field is opposite to that of the electric force if the test charge is ",
+                after: ".",
+                answer: "Negative",
+                accepted: ["negative"]
+            },
+
+            // --- MODULE 3: ELECTRIC POTENTIAL & CAPACITORS ---
+            {
+                id: 27,
+                topic: "Potential & Capacitors",
+                before: "",
+                after: " at a point in a field is defined as the work done per unit charge moving from infinity to that point.",
+                answer: "Electric potential",
+                accepted: ["electric potential", "potential"]
+            },
+            {
+                id: 28,
+                topic: "Potential & Capacitors",
+                before: "The SI unit of electric potential is joule per coulomb (J/C) or ",
+                after: ".",
+                answer: "Volt",
+                accepted: ["volt", "volts", "v"]
+            },
+            {
+                id: 29,
+                topic: "Potential & Capacitors",
+                before: "A pair of equal and opposite charges, ±q, separated by a vector distance is called an electric ",
+                after: ".",
+                answer: "Dipole",
+                accepted: ["dipole", "electric dipole"]
+            },
+            {
+                id: 30,
+                topic: "Potential & Capacitors",
+                before: "The work done in taking a unit positive charge from one point to another in an electrostatic field is ",
+                after: " of the path chosen.",
+                answer: "Independent",
+                accepted: ["independent"]
+            },
+            {
+                id: 31,
+                topic: "Potential & Capacitors",
+                before: "1 electron-volt (1 eV) is the energy acquired by an electron in falling freely through a potential difference of ",
+                after: ".",
+                answer: "1 volt",
+                accepted: ["1 volt", "1volt", "one volt", "1v"]
+            },
+            {
+                id: 32,
+                topic: "Potential & Capacitors",
+                before: "A ",
+                after: " is a device which can store electric charge and electrical energy.",
+                answer: "Capacitor",
+                accepted: ["capacitor", "condenser"]
+            },
+            {
+                id: 33,
+                topic: "Potential & Capacitors",
+                before: "The ",
+                after: " of a capacitor is a measure of its ability to store electric charge per unit potential difference.",
+                answer: "Capacitance",
+                accepted: ["capacitance"]
+            },
+            {
+                id: 34,
+                topic: "Potential & Capacitors",
+                before: "The SI unit of capacitance is coulomb per volt (C/V), also known as a ",
+                after: ".",
+                answer: "Farad",
+                accepted: ["farad", "f"]
+            },
+            {
+                id: 35,
+                topic: "Potential & Capacitors",
+                before: "When a dielectric material is subjected to a sufficiently strong electric field and becomes a conductor, the phenomenon is called ",
+                after: ".",
+                answer: "Dielectric breakdown",
+                accepted: ["dielectric breakdown", "breakdown"]
+            },
+            {
+                id: 36,
+                topic: "Potential & Capacitors",
+                before: "The maximum electric field a dielectric material can withstand without breakdown occurring is called its ",
+                after: ".",
+                answer: "Dielectric strength",
+                accepted: ["dielectric strength"]
+            },
+            {
+                id: 37,
+                topic: "Potential & Capacitors",
+                before: "In an electrolytic capacitor, the positive aluminum plate is electrolytically coated with a thin layer of ",
+                after: ".",
+                answer: "Aluminium oxide",
+                accepted: ["aluminium oxide", "aluminum oxide"]
+            },
+            {
+                id: 38,
+                topic: "Potential & Capacitors",
+                before: "When a dielectric material is inserted between the plates of a capacitor, it ",
+                after: " its capacitance.",
+                answer: "Increases",
+                accepted: ["increases", "increase"]
+            },
+            {
+                id: 39,
+                topic: "Potential & Capacitors",
+                before: "For capacitors connected in series, each capacitor stores the same ",
+                after: ".",
+                answer: "Charge",
+                accepted: ["charge", "electric charge"]
+            },
+            {
+                id: 40,
+                topic: "Potential & Capacitors",
+                before: "For capacitors connected in parallel, the ",
+                after: " across each capacitor is the same.",
+                answer: "Potential difference",
+                accepted: ["potential difference", "voltage", "p.d", "pd"]
+            },
+
+            // --- MODULE 4: CURRENT, CIRCUITS & ELECTROLYSIS ---
+            {
+                id: 41,
+                topic: "Current, Circuits & Electrolysis",
+                before: "Current per unit area perpendicular to the velocity of the charge carriers is defined as ",
+                after: ".",
+                answer: "Current density",
+                accepted: ["current density"]
+            },
+            {
+                id: 42,
+                topic: "Current, Circuits & Electrolysis",
+                before: "A resistance of 1 volt per ampere (1 V/A) is called ",
+                after: ".",
+                answer: "1 Ohm",
+                accepted: ["1 ohm", "ohm", "one ohm", "1ω"]
+            },
+            {
+                id: 43,
+                topic: "Current, Circuits & Electrolysis",
+                before: "A perfect conductor has ",
+                after: " resistivity.",
+                answer: "Zero",
+                accepted: ["zero", "0"]
+            },
+            {
+                id: 44,
+                topic: "Current, Circuits & Electrolysis",
+                before: "The ",
+                after: " of a source is the energy per unit charge converted from other forms into electrical energy.",
+                answer: "Electromotive force",
+                accepted: ["electromotive force", "emf", "e.m.f"]
+            },
+            {
+                id: 45,
+                topic: "Current, Circuits & Electrolysis",
+                before: "The term 'lost volts' refers to the energy per unit charge dissipated in the ",
+                after: " of a cell or battery.",
+                answer: "Internal resistance",
+                accepted: ["internal resistance"]
+            },
+            {
+                id: 46,
+                topic: "Current, Circuits & Electrolysis",
+                before: "Kirchhoff's ",
+                after: " states that the algebraic sum of the currents toward any branch point is zero (conservation of charge).",
+                answer: "Point rule",
+                accepted: ["point rule", "junction rule", "first law", "current law"]
+            },
+            {
+                id: 47,
+                topic: "Current, Circuits & Electrolysis",
+                before: "Kirchhoff's ",
+                after: " states that the algebraic sum of the e.m.f.s in any closed loop equals the algebraic sum of the IR products.",
+                answer: "Loop rule",
+                accepted: ["loop rule", "second law", "voltage rule"]
+            },
+            {
+                id: 48,
+                topic: "Current, Circuits & Electrolysis",
+                before: "The most widely used bridge method for accurately measuring unknown resistance is the ",
+                after: ".",
+                answer: "Wheatstone bridge",
+                accepted: ["wheatstone bridge"]
+            },
+            {
+                id: 49,
+                topic: "Current, Circuits & Electrolysis",
+                before: "A practical slide-wire form of the Wheatstone bridge is the ",
+                after: ".",
+                answer: "Meter bridge",
+                accepted: ["meter bridge", "metre bridge"]
+            },
+            {
+                id: 50,
+                topic: "Current, Circuits & Electrolysis",
+                before: "A ",
+                after: " consists of a resistance wire of uniform cross-section used to measure e.m.f. without drawing current.",
+                answer: "Potentiometer",
+                accepted: ["potentiometer"]
+            },
+            {
+                id: 51,
+                topic: "Current, Circuits & Electrolysis",
+                before: "The Ionic Theory of Electrolysis was put forward by ",
+                after: " in 1887.",
+                answer: "Arrhenius",
+                accepted: ["arrhenius", "svante arrhenius"]
+            },
+            {
+                id: 52,
+                topic: "Current, Circuits & Electrolysis",
+                before: "The ",
+                after: " of a substance is the mass liberated in electrolysis by 1 coulomb of electric charge.",
+                answer: "Electrochemical equivalent",
+                accepted: ["electrochemical equivalent", "e.c.e"]
+            },
+            {
+                id: 53,
+                topic: "Current, Circuits & Electrolysis",
+                before: "Secondary rechargeable cells are also referred to as ",
+                after: ".",
+                answer: "Accumulators",
+                accepted: ["accumulators", "accumulator"]
+            },
+            {
+                id: 54,
+                topic: "Current, Circuits & Electrolysis",
+                before: "A ",
+                after: " is a short length of wire (often tinned copper) designed to melt when current exceeds a safe value.",
+                answer: "Fuse",
+                accepted: ["fuse"]
+            },
+
+            // --- MODULE 5: MAGNETISM & ELECTROMAGNETIC INDUCTION ---
+            {
+                id: 55,
+                topic: "Magnetism & Induction",
+                before: "A ",
+                after: " is a place where two magnetic fields are equal and opposite and the resultant magnetic force is zero.",
+                answer: "Neutral point",
+                accepted: ["neutral point"]
+            },
+            {
+                id: 56,
+                topic: "Magnetism & Induction",
+                before: "The field pattern due to an electric current in a long cylindrical coil called a ",
+                after: " is similar to that of a bar magnet.",
+                answer: "Solenoid",
+                accepted: ["solenoid"]
+            },
+            {
+                id: 57,
+                topic: "Magnetism & Induction",
+                before: "The SI unit of magnetic flux (V·s) is called a ",
+                after: ".",
+                answer: "Weber",
+                accepted: ["weber", "wb"]
+            },
+            {
+                id: 58,
+                topic: "Magnetism & Induction",
+                before: "The ",
+                after: " is a machine used for accelerating charged particles and ions to high velocities using magnetic and electric fields.",
+                answer: "Cyclotron",
+                accepted: ["cyclotron", "cyclotrons"]
+            },
+            {
+                id: 59,
+                topic: "Magnetism & Induction",
+                before: "Lines joining places on the Earth's map where the magnetic declination is the same are called ",
+                after: ".",
+                answer: "Isogonic lines",
+                accepted: ["isogonic lines", "isogonic"]
+            },
+            {
+                id: 60,
+                topic: "Magnetism & Induction",
+                before: "Lines passing through places on the Earth having zero magnetic declination are called ",
+                after: ".",
+                answer: "Agonic lines",
+                accepted: ["agonic lines", "agonic"]
+            },
+            {
+                id: 61,
+                topic: "Magnetism & Induction",
+                before: "Lines joining places on the Earth's map where the magnetic dip (inclination) is the same are called ",
+                after: ".",
+                answer: "Isoclinic lines",
+                accepted: ["isoclinic lines", "isoclinic"]
+            },
+            {
+                id: 62,
+                topic: "Magnetism & Induction",
+                before: "A line passing through places on the Earth having zero magnetic dip is called the ",
+                after: ".",
+                answer: "Aclinic line",
+                accepted: ["aclinic line", "aclinic", "magnetic equator"]
+            },
+            {
+                id: 63,
+                topic: "Magnetism & Induction",
+                before: "The variation of a compass needle from the true geographic north-south direction is called magnetic ",
+                after: ".",
+                answer: "Declination",
+                accepted: ["declination", "angle of declination"]
+            },
+            {
+                id: 64,
+                topic: "Magnetism & Induction",
+                before: "A ",
+                after: " is a device which changes an alternating potential difference from one value to another using mutual induction.",
+                answer: "Transformer",
+                accepted: ["transformer"]
+            },
+            {
+                id: 65,
+                topic: "Magnetism & Induction",
+                before: "",
+                after: " states that the direction of an induced e.m.f. is always such as to oppose the change producing it.",
+                answer: "Lenz's law",
+                accepted: ["lenz's law", "lenz law", "lenzs law"]
+            },
+            {
+                id: 66,
+                topic: "Magnetism & Induction",
+                before: "According to ",
+                after: ", the magnitude of the induced e.m.f. is directly proportional to the rate of change of magnetic flux linkage.",
+                answer: "Faraday's law",
+                accepted: ["faraday's law", "faraday law", "faradays law"]
+            },
+
+            // --- MODULE 6: ELECTRONICS, RECTIFIERS & PHOTOELECTRIC EFFECT ---
+            {
+                id: 67,
+                topic: "Electronics & Photoelectric Effect",
+                before: "The conversion of alternating current (a.c.) to direct current (d.c.) is called ",
+                after: ".",
+                answer: "Rectification",
+                accepted: ["rectification"]
+            },
+            {
+                id: 68,
+                topic: "Electronics & Photoelectric Effect",
+                before: "A ",
+                after: " is a device with low resistance to current flow in one direction and high resistance in the reverse direction.",
+                answer: "Rectifier",
+                accepted: ["rectifier", "diode"]
+            },
+            {
+                id: 69,
+                topic: "Electronics & Photoelectric Effect",
+                before: "An electronic component such as a transistor that is capable of signal amplification is called an ",
+                after: ".",
+                answer: "Active element",
+                accepted: ["active element", "active component"]
+            },
+            {
+                id: 70,
+                topic: "Electronics & Photoelectric Effect",
+                before: "The ",
+                after: " is the emission of electrons from metal surfaces when electromagnetic radiation of high enough frequency falls on them.",
+                answer: "Photoelectric effect",
+                accepted: ["photoelectric effect", "photoelectric"]
+            },
+            {
+                id: 71,
+                topic: "Electronics & Photoelectric Effect",
+                before: "The photoelectric effect was first noticed in 1887 by the German physicist ",
+                after: ".",
+                answer: "Heinrich Hertz",
+                accepted: ["heinrich hertz", "hertz"]
+            },
+            {
+                id: 72,
+                topic: "Electronics & Photoelectric Effect",
+                before: "In the photoelectric effect, the kinetic energy of the emitted photoelectrons depends on the ",
+                after: " of the incident radiation.",
+                answer: "Frequency",
+                accepted: ["frequency"]
+            },
+            {
+                id: 73,
+                topic: "Electronics & Photoelectric Effect",
+                before: "The emission of electrons from a metal surface by heating the metal is called ",
+                after: ".",
+                answer: "Thermionic emission",
+                accepted: ["thermionic emission", "thermionic effect"]
+            },
+            {
+                id: 74,
+                topic: "Electronics & Photoelectric Effect",
+                before: "The ",
+                after: " is the generation of an e.m.f. in a circuit containing two different metals whose junctions are kept at different temperatures.",
+                answer: "Seebeck effect",
+                accepted: ["seebeck effect", "thermoelectric effect"]
+            },
+
+            // --- MODULE 7: BLACKBODY, ATOMIC & NUCLEAR PHYSICS ---
+            {
+                id: 75,
+                topic: "Atomic & Nuclear Physics",
+                before: "An ideal hypothetical body that absorbs all incoming electromagnetic radiation falling on it is called a ",
+                after: ".",
+                answer: "Blackbody",
+                accepted: ["blackbody", "black body"]
+            },
+            {
+                id: 76,
+                topic: "Atomic & Nuclear Physics",
+                before: "In 1900, ",
+                after: " developed a quantum formula for blackbody radiation using submicroscopic oscillators called resonators.",
+                answer: "Max Planck",
+                accepted: ["max planck", "planck"]
+            },
+            {
+                id: 77,
+                topic: "Atomic & Nuclear Physics",
+                before: "The electron was discovered in 1897 by ",
+                after: ".",
+                answer: "J.J. Thomson",
+                accepted: ["j.j. thomson", "jj thomson", "thomson", "joseph john thomson"]
+            },
+            {
+                id: 78,
+                topic: "Atomic & Nuclear Physics",
+                before: "In 1913, ",
+                after: " applied quantum theory to the nuclear atom and proposed quantized electron orbits.",
+                answer: "Niels Bohr",
+                accepted: ["niels bohr", "bohr"]
+            },
+            {
+                id: 79,
+                topic: "Atomic & Nuclear Physics",
+                before: "Protons and neutrons, both being constituents of the atomic nucleus, are collectively called ",
+                after: ".",
+                answer: "Nucleons",
+                accepted: ["nucleons", "nucleon"]
+            },
+            {
+                id: 80,
+                topic: "Atomic & Nuclear Physics",
+                before: "Atoms of the same element having the same number of protons but different numbers of neutrons are called ",
+                after: ".",
+                answer: "Isotopes",
+                accepted: ["isotopes", "isotope"]
+            }
+        ];
+
+        /**
+         * ============================================================================
+         * APPLICATION STATE
+         * ============================================================================
+         */
+        const state = {
+            mode: 'exam',               // 'exam' | 'practice'
+            questions: [],              // Active subset of questions for current session
+            currentIndex: 0,
+            userAnswers: {},            // { [questionId]: string }
+            checkedStatus: {},          // { [questionId]: boolean } (for practice mode)
+            flagged: new Set(),         // Set of questionIds flagged for review
+            durationSeconds: 1200,
+            remainingSeconds: 1200,
+            startTime: null,
+            timerInterval: null,
+            isSubmitted: false
+        };
+
+        /**
+         * ============================================================================
+         * DOM ELEMENT REFERENCES
+         * ============================================================================
+         */
+        const dom = {
+            // Views
+            setupView: document.getElementById('setupView'),
+            examView: document.getElementById('examView'),
+            resultsView: document.getElementById('resultsView'),
+
+            // Topbar HUD
+            examHud: document.getElementById('examHud'),
+            hudModeBadge: document.getElementById('hudModeBadge'),
+            hudTimer: document.getElementById('hudTimer'),
+            timerDisplay: document.getElementById('timerDisplay'),
+
+            // Setup Controls
+            cardExamMode: document.getElementById('cardExamMode'),
+            cardPracticeMode: document.getElementById('cardPracticeMode'),
+            topicFilter: document.getElementById('topicFilter'),
+            questionCount: document.getElementById('questionCount'),
+            durationGroup: document.getElementById('durationGroup'),
+            examDuration: document.getElementById('examDuration'),
+            startExamBtn: document.getElementById('startExamBtn'),
+
+            // Exam Workspace
+            qCounterBadge: document.getElementById('qCounterBadge'),
+            qTopicBadge: document.getElementById('qTopicBadge'),
+            progressFill: document.getElementById('progressFill'),
+            questionPrompt: document.getElementById('questionPrompt'),
+            gapInput: document.getElementById('gapInput'),
+            checkAnswerBtn: document.getElementById('checkAnswerBtn'),
+            instantFeedbackBox: document.getElementById('instantFeedbackBox'),
+            prevBtn: document.getElementById('prevBtn'),
+            nextBtn: document.getElementById('nextBtn'),
+            flagBtn: document.getElementById('flagBtn'),
+            clearBtn: document.getElementById('clearBtn'),
+
+            // Sidebar
+            answeredCountText: document.getElementById('answeredCountText'),
+            paletteGrid: document.getElementById('paletteGrid'),
+            submitExamBtn: document.getElementById('submitExamBtn'),
+
+            // Results View
+            scoreCircle: document.getElementById('scoreCircle'),
+            scorePercent: document.getElementById('scorePercent'),
+            scoreGradeLabel: document.getElementById('scoreGradeLabel'),
+            resultHeadline: document.getElementById('resultHeadline'),
+            resultSubtext: document.getElementById('resultSubtext'),
+            metricRaw: document.getElementById('metricRaw'),
+            metricCorrect: document.getElementById('metricCorrect'),
+            metricIncorrect: document.getElementById('metricIncorrect'),
+            metricUnanswered: document.getElementById('metricUnanswered'),
+            metricTime: document.getElementById('metricTime'),
+            retryMissedBtn: document.getElementById('retryMissedBtn'),
+            retakeSameBtn: document.getElementById('retakeSameBtn'),
+            newSessionBtn: document.getElementById('newSessionBtn'),
+            reviewFilterTabs: document.getElementById('reviewFilterTabs'),
+            reviewList: document.getElementById('reviewList'),
+
+            // Modal
+            confirmModal: document.getElementById('confirmModal'),
+            modalTitle: document.getElementById('modalTitle'),
+            modalMessage: document.getElementById('modalMessage'),
+            modalCancelBtn: document.getElementById('modalCancelBtn'),
+            modalConfirmBtn: document.getElementById('modalConfirmBtn')
+        };
+
+        /**
+         * ============================================================================
+         * UTILITY FUNCTIONS (Normalization, Shuffling, Answer Checking)
+         * ============================================================================
+         */
+        function normalizeText(str) {
+            if (!str) return "";
+            return str
+                .toLowerCase()
+                .trim()
+                .replace(/[.,'’"°()\-]/g, "")
+                .replace(/\s+/g, " ");
+        }
+
+        function isAnswerCorrect(question, userRawInput) {
+            const cleanedUser = normalizeText(userRawInput);
+            if (!cleanedUser) return false;
+
+            const compactUser = cleanedUser.replace(/\s+/g, "");
+            const candidates = [question.answer, ...(question.accepted || [])];
+
+            return candidates.some(candidate => {
+                const cleanedCand = normalizeText(candidate);
+                const compactCand = cleanedCand.replace(/\s+/g, "");
+                return cleanedUser === cleanedCand || compactUser === compactCand;
+            });
+        }
+
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function formatSeconds(totalSec) {
+            const mins = Math.floor(totalSec / 60);
+            const secs = totalSec % 60;
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        /**
+         * ============================================================================
+         * SETUP & INITIALIZATION LOGIC
+         * ============================================================================
+         */
+        function selectMode(mode) {
+            state.mode = mode;
+            dom.cardExamMode.classList.toggle('active', mode === 'exam');
+            dom.cardPracticeMode.classList.toggle('active', mode === 'practice');
+            dom.durationGroup.style.opacity = mode === 'exam' ? '1' : '0.45';
+            dom.examDuration.disabled = mode !== 'exam';
+        }
+
+        dom.cardExamMode.addEventListener('click', () => selectMode('exam'));
+        dom.cardPracticeMode.addEventListener('click', () => selectMode('practice'));
+
+        function startSession(customQuestions = null) {
+            // 1. Filter & select questions
+            let pool = customQuestions;
+            if (!pool) {
+                const selectedTopic = dom.topicFilter.value;
+                pool = selectedTopic === 'ALL'
+                    ? [...PHY102_QUESTIONS]
+                    : PHY102_QUESTIONS.filter(q => q.topic === selectedTopic);
+
+                pool = shuffleArray(pool);
+
+                const countVal = dom.questionCount.value;
+                if (countVal !== 'ALL') {
+                    const limit = parseInt(countVal, 10);
+                    pool = pool.slice(0, Math.min(limit, pool.length));
+                }
+            }
+
+            // 2. Reset state
+            state.questions = pool;
+            state.currentIndex = 0;
+            state.userAnswers = {};
+            state.checkedStatus = {};
+            state.flagged = new Set();
+            state.isSubmitted = false;
+            state.startTime = Date.now();
+
+            // 3. Configure HUD & Timer
+            dom.setupView.classList.add('hidden');
+            dom.resultsView.classList.add('hidden');
+            dom.examView.classList.remove('hidden');
+            dom.examHud.classList.remove('hidden');
+
+            const practiceLegendItems = document.querySelectorAll('.practice-only');
+            if (state.mode === 'practice') {
+                dom.hudModeBadge.textContent = 'Practice Mode';
+                dom.hudTimer.classList.add('hidden');
+                dom.checkAnswerBtn.classList.remove('hidden');
+                practiceLegendItems.forEach(el => el.classList.remove('hidden'));
+            } else {
+                dom.hudModeBadge.textContent = 'Timed Exam Mode';
+                dom.hudTimer.classList.remove('hidden', 'warning', 'danger');
+                dom.checkAnswerBtn.classList.add('hidden');
+                practiceLegendItems.forEach(el => el.classList.add('hidden'));
+
+                const mins = parseInt(dom.examDuration.value, 10);
+                state.durationSeconds = mins * 60;
+                state.remainingSeconds = state.durationSeconds;
+                startCountdown();
+            }
+
+            buildPalette();
+            renderQuestion();
+        }
+
+        function startCountdown() {
+            clearInterval(state.timerInterval);
+            dom.timerDisplay.textContent = formatSeconds(state.remainingSeconds);
+
+            state.timerInterval = setInterval(() => {
+                state.remainingSeconds--;
+                dom.timerDisplay.textContent = formatSeconds(Math.max(0, state.remainingSeconds));
+
+                if (state.remainingSeconds <= 60) {
+                    dom.hudTimer.classList.remove('warning');
+                    dom.hudTimer.classList.add('danger');
+                } else if (state.remainingSeconds <= 180) {
+                    dom.hudTimer.classList.add('warning');
+                }
+
+                if (state.remainingSeconds <= 0) {
+                    clearInterval(state.timerInterval);
+                    finalizeSubmission();
+                }
+            }, 1000);
+        }
+
+        /**
+         * ============================================================================
+         * EXAM WORKSPACE RENDERING & INTERACTION
+         * ============================================================================
+         */
+        function buildPalette() {
+            dom.paletteGrid.innerHTML = '';
+            state.questions.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'palette-btn';
+                btn.textContent = idx + 1;
+                btn.title = `Go to Question ${idx + 1}`;
+                btn.addEventListener('click', () => {
+                    saveCurrentInput();
+                    state.currentIndex = idx;
+                    renderQuestion();
+                });
+                dom.paletteGrid.appendChild(btn);
+            });
+            updatePaletteStates();
+        }
+
+        function updatePaletteStates() {
+            const buttons = dom.paletteGrid.querySelectorAll('.palette-btn');
+            let answeredTotal = 0;
+
+            state.questions.forEach((q, idx) => {
+                const btn = buttons[idx];
+                if (!btn) return;
+
+                const rawAns = (state.userAnswers[q.id] || '').trim();
+                const hasAns = rawAns.length > 0;
+                if (hasAns) answeredTotal++;
+
+                btn.className = 'palette-btn';
+                if (idx === state.currentIndex) btn.classList.add('current');
+                if (state.flagged.has(q.id)) btn.classList.add('flagged');
+
+                if (state.mode === 'practice' && state.checkedStatus[q.id]) {
+                    const correct = isAnswerCorrect(q, rawAns);
+                    btn.classList.add(correct ? 'correct' : 'incorrect');
+                } else if (hasAns) {
+                    btn.classList.add('answered');
+                }
+            });
+
+            dom.answeredCountText.textContent = `${answeredTotal} / ${state.questions.length} Answered`;
+        }
+
+        function renderQuestion() {
+            const q = state.questions[state.currentIndex];
+            const total = state.questions.length;
+            const currentVal = state.userAnswers[q.id] || '';
+
+            // Badges & Progress
+            dom.qCounterBadge.textContent = `Question ${state.currentIndex + 1} of ${total}`;
+            dom.qTopicBadge.textContent = q.topic;
+            dom.progressFill.style.width = `${((state.currentIndex + 1) / total) * 100}%`;
+
+            // Prompt with dynamic live-preview blank
+            const gapDisplay = currentVal.trim() ? escapeHTML(currentVal.trim()) : '___________';
+            const gapClass = currentVal.trim() ? 'inline-gap filled' : 'inline-gap';
+            dom.questionPrompt.innerHTML = `
+                ${escapeHTML(q.before)}<span id="liveInlineGap" class="${gapClass}">${gapDisplay}</span>${escapeHTML(q.after)}
+            `;
+
+            // Input field state
+            dom.gapInput.value = currentVal;
+            dom.gapInput.classList.remove('is-correct', 'is-incorrect');
+            dom.instantFeedbackBox.classList.add('hidden');
+
+            // If practice mode & already checked, show feedback
+            if (state.mode === 'practice' && state.checkedStatus[q.id]) {
+                showPracticeFeedback(q, currentVal);
+            }
+
+            // Flag button state
+            const isFlagged = state.flagged.has(q.id);
+            dom.flagBtn.classList.toggle('flagged', isFlagged);
+            dom.flagBtn.textContent = isFlagged ? '⚑ Flagged' : '⚑ Flag for Review';
+
+            // Navigation button states
+            dom.prevBtn.disabled = state.currentIndex === 0;
+            dom.nextBtn.textContent = state.currentIndex === total - 1 ? 'Review / Finish ✓' : 'Next →';
+
+            updatePaletteStates();
+
+            // Auto-focus input smoothly
+            setTimeout(() => dom.gapInput.focus(), 30);
+        }
+
+        function saveCurrentInput() {
+            const q = state.questions[state.currentIndex];
+            if (!q) return;
+            state.userAnswers[q.id] = dom.gapInput.value;
+        }
+
+        function showPracticeFeedback(q, userVal) {
+            const correct = isAnswerCorrect(q, userVal);
+            dom.gapInput.classList.remove('is-correct', 'is-incorrect');
+            dom.gapInput.classList.add(correct ? 'is-correct' : 'is-incorrect');
+
+            dom.instantFeedbackBox.className = `instant-feedback ${correct ? 'correct' : 'incorrect'}`;
+            dom.instantFeedbackBox.innerHTML = correct
+                ? `<span><strong>✓ Correct!</strong> "${escapeHTML(q.answer)}" matches the PHY102 answer key.</span>`
+                : `<span><strong>✕ Incorrect.</strong> Official PHY102 Answer: <strong>${escapeHTML(q.answer)}</strong></span>`;
+            dom.instantFeedbackBox.classList.remove('hidden');
+        }
+
+        // Live sync input with inline blank & state
+        dom.gapInput.addEventListener('input', () => {
+            const q = state.questions[state.currentIndex];
+            const val = dom.gapInput.value;
+            state.userAnswers[q.id] = val;
+
+            // Reset checked status if user edits answer in practice mode
+            if (state.mode === 'practice' && state.checkedStatus[q.id]) {
+                state.checkedStatus[q.id] = false;
+                dom.gapInput.classList.remove('is-correct', 'is-incorrect');
+                dom.instantFeedbackBox.classList.add('hidden');
+            }
+
+            const inlineGap = document.getElementById('liveInlineGap');
+            if (inlineGap) {
+                inlineGap.textContent = val.trim() ? val.trim() : '___________';
+                inlineGap.classList.toggle('filled', val.trim().length > 0);
+            }
+
+            updatePaletteStates();
+        });
+
+        // Keyboard Enter shortcut
+        dom.gapInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const q = state.questions[state.currentIndex];
+                if (state.mode === 'practice' && !state.checkedStatus[q.id] && dom.gapInput.value.trim()) {
+                    state.checkedStatus[q.id] = true;
+                    showPracticeFeedback(q, dom.gapInput.value);
+                    updatePaletteStates();
+                } else {
+                    goNext();
+                }
+            }
+        });
+
+        dom.checkAnswerBtn.addEventListener('click', () => {
+            const q = state.questions[state.currentIndex];
+            saveCurrentInput();
+            state.checkedStatus[q.id] = true;
+            showPracticeFeedback(q, dom.gapInput.value);
+            updatePaletteStates();
+        });
+
+        function goNext() {
+            saveCurrentInput();
+            if (state.currentIndex < state.questions.length - 1) {
+                state.currentIndex++;
+                renderQuestion();
+            } else {
+                openSubmitModal();
+            }
+        }
+
+        function goPrev() {
+            saveCurrentInput();
+            if (state.currentIndex > 0) {
+                state.currentIndex--;
+                renderQuestion();
+            }
+        }
+
+        dom.nextBtn.addEventListener('click', goNext);
+        dom.prevBtn.addEventListener('click', goPrev);
+
+        dom.flagBtn.addEventListener('click', () => {
+            const q = state.questions[state.currentIndex];
+            if (state.flagged.has(q.id)) {
+                state.flagged.delete(q.id);
+            } else {
+                state.flagged.add(q.id);
+            }
+            renderQuestion();
+        });
+
+        dom.clearBtn.addEventListener('click', () => {
+            const q = state.questions[state.currentIndex];
+            dom.gapInput.value = '';
+            state.userAnswers[q.id] = '';
+            state.checkedStatus[q.id] = false;
+            renderQuestion();
+        });
+
+        /**
+         * ============================================================================
+         * SUBMISSION & CONFIRMATION MODAL
+         * ============================================================================
+         */
+        function openSubmitModal() {
+            saveCurrentInput();
+            const answered = state.questions.filter(q => (state.userAnswers[q.id] || '').trim().length > 0).length;
+            const unanswered = state.questions.length - answered;
+
+            dom.modalTitle.textContent = 'Finish & Submit PHY102 CBT?';
+            dom.modalMessage.textContent = unanswered > 0
+                ? `You have answered ${answered} of ${state.questions.length} questions (${unanswered} unanswered). Are you ready to grade your script?`
+                : `All ${state.questions.length} questions have been answered. Ready to view your score and review?`;
+
+            dom.confirmModal.classList.remove('hidden');
+        }
+
+        dom.submitExamBtn.addEventListener('click', openSubmitModal);
+        dom.modalCancelBtn.addEventListener('click', () => dom.confirmModal.classList.add('hidden'));
+        dom.modalConfirmBtn.addEventListener('click', () => {
+            dom.confirmModal.classList.add('hidden');
+            finalizeSubmission();
+        });
+
+        /**
+         * ============================================================================
+         * GRADING & RESULTS VIEW
+         * ============================================================================
+         */
+        let gradedResults = [];
+
+        function finalizeSubmission() {
+            clearInterval(state.timerInterval);
+            saveCurrentInput();
+            state.isSubmitted = true;
+
+            const elapsedSeconds = Math.max(1, Math.round((Date.now() - state.startTime) / 1000));
+
+            let correctCount = 0;
+            let incorrectCount = 0;
+            let unansweredCount = 0;
+
+            gradedResults = state.questions.map((q, index) => {
+                const rawUser = (state.userAnswers[q.id] || '').trim();
+                let status = 'unanswered';
+
+                if (!rawUser) {
+                    unansweredCount++;
+                } else if (isAnswerCorrect(q, rawUser)) {
+                    status = 'correct';
+                    correctCount++;
+                } else {
+                    status = 'incorrect';
+                    incorrectCount++;
+                }
+
+                return {
+                    number: index + 1,
+                    question: q,
+                    userAnswer: rawUser,
+                    status
+                };
+            });
+
+            const total = state.questions.length;
+            const percentage = Math.round((correctCount / total) * 100);
+
+            // Switch views
+            dom.examView.classList.add('hidden');
+            dom.examHud.classList.add('hidden');
+            dom.resultsView.classList.remove('hidden');
+
+            // Populate Score Banner
+            dom.scorePercent.textContent = `${percentage}%`;
+            dom.scoreCircle.className = 'score-circle';
+
+            if (percentage >= 75) {
+                dom.scoreCircle.classList.add('grade-a');
+                dom.scoreGradeLabel.textContent = 'Distinction';
+                dom.resultHeadline.textContent = 'Outstanding Mastery of PHY102!';
+            } else if (percentage >= 60) {
+                dom.scoreCircle.classList.add('grade-b');
+                dom.scoreGradeLabel.textContent = 'Credit Pass';
+                dom.resultHeadline.textContent = 'Solid Performance!';
+            } else if (percentage >= 45) {
+                dom.scoreCircle.classList.add('grade-c');
+                dom.scoreGradeLabel.textContent = 'Average Pass';
+                dom.resultHeadline.textContent = 'Good Effort — Review Missed Concepts';
+            } else {
+                dom.scoreCircle.classList.add('grade-f');
+                dom.scoreGradeLabel.textContent = 'Needs Review';
+                dom.resultHeadline.textContent = 'Keep Practicing the PHY102 Summary';
+            }
+
+            dom.metricRaw.textContent = `${correctCount} / ${total}`;
+            dom.metricCorrect.textContent = correctCount;
+            dom.metricIncorrect.textContent = incorrectCount;
+            dom.metricUnanswered.textContent = unansweredCount;
+            dom.metricTime.textContent = formatSeconds(elapsedSeconds);
+
+            // Show "Practice Missed" button if any questions were missed or skipped
+            const missedQuestions = gradedResults
+                .filter(r => r.status !== 'correct')
+                .map(r => r.question);
+
+            if (missedQuestions.length > 0) {
+                dom.retryMissedBtn.classList.remove('hidden');
+                dom.retryMissedBtn.textContent = `Practice Missed (${missedQuestions.length})`;
+                dom.retryMissedBtn.onclick = () => startSession(shuffleArray(missedQuestions));
+            } else {
+                dom.retryMissedBtn.classList.add('hidden');
+            }
+
+            // Reset filter tabs and render script
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.filter-tab[data-filter="all"]').classList.add('active');
+            renderReviewList('all');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderReviewList(filter) {
+            dom.reviewList.innerHTML = '';
+
+            const filtered = filter === 'all'
+                ? gradedResults
+                : gradedResults.filter(item => item.status === filter);
+
+            if (filtered.length === 0) {
+                dom.reviewList.innerHTML = `
+                    <div class="info-box" style="text-align:center; padding:2rem;">
+                        No questions match the selected "${filter}" filter.
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `review-item ${item.status}`;
+
+                const statusLabel = item.status === 'correct'
+                    ? 'Correct'
+                    : item.status === 'incorrect'
+                        ? 'Incorrect'
+                        : 'Unanswered';
+
+                const userDisplay = item.userAnswer
+                    ? escapeHTML(item.userAnswer)
+                    : '<em style="color:var(--text-muted)">(No answer entered)</em>';
+
+                card.innerHTML = `
+                    <div class="review-item-head">
+                        <span>Question #${item.number} • ${escapeHTML(item.question.topic)}</span>
+                        <span class="status-badge ${item.status}">${statusLabel}</span>
+                    </div>
+                    <div class="review-q-text">
+                        ${escapeHTML(item.question.before)}<strong style="color:var(--primary); text-decoration:underline;">${escapeHTML(item.question.answer)}</strong>${escapeHTML(item.question.after)}
+                    </div>
+                    <div class="review-answers">
+                        <div>
+                            <span style="color:var(--text-secondary); display:block; font-size:0.78rem;">Your Response:</span>
+                            <strong style="color:${item.status === 'correct' ? 'var(--success)' : 'var(--danger)'}">${userDisplay}</strong>
+                        </div>
+                        <div>
+                            <span style="color:var(--text-secondary); display:block; font-size:0.78rem;">Official PHY102 Answer:</span>
+                            <strong style="color:var(--success)">${escapeHTML(item.question.answer)}</strong>
+                        </div>
+                    </div>
+                `;
+                dom.reviewList.appendChild(card);
+            });
+        }
+
+        dom.reviewFilterTabs.addEventListener('click', (e) => {
+            const tab = e.target.closest('.filter-tab');
+            if (!tab) return;
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            renderReviewList(tab.dataset.filter);
+        });
+
+        // Navigation from Results
+        dom.startExamBtn.addEventListener('click', () => startSession());
+        dom.retakeSameBtn.addEventListener('click', () => startSession(shuffleArray(state.questions)));
+        dom.newSessionBtn.addEventListener('click', () => {
+            dom.resultsView.classList.add('hidden');
+            dom.setupView.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
